@@ -107,4 +107,9 @@ class Cipher{
         return $this->decryptedText = $this->cipher->decrypt($this->originalText);
     }
 
+    public function __call($name, $arguments)
+    {
+        return $this->cipher->$name($arguments);
+    }
+
 }

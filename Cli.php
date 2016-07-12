@@ -4,8 +4,10 @@ namespace CommandLine;
 
 require_once ('./Cipher.php');
 require_once ('./Ciphers/SubstitutionCipher.php');
+require_once ('./Ciphers/FrequencyAnalysis.php');
 
 use Cipher\Cipher;
+use Ciphers\FrequencyAnalysis;
 use Ciphers\SubstitutionCipher;
 
 class Cli{
@@ -40,14 +42,53 @@ class Cli{
     public static function process(array $args){
 
         $cipher = new Cipher();
-        $cipher->uses(new SubstitutionCipher());
 
-        if(array_key_exists('c', $args)){
-            $cipher->uses($args['c']);
-        }
+        print("Welcome to Cipher"). PHP_EOL;
+        print ("Please select a cipher: ") . PHP_EOL;
 
+        print("1 - SubstitutionCipher") . PHP_EOL;
+        print("2 - FrequencyAnalysis") . PHP_EOL;
+
+        $handle = fopen ("php://stdin","r");
+        $line = fgets($handle);
+        fclose($handle);
 
         print PHP_EOL . "Selected cipher: ";
+
+        switch($line){
+            case 1:
+                $cipher->uses(new SubstitutionCipher());
+                self::substitution($cipher, $args);
+                break;
+
+            case 2:
+                $cipher->uses(new FrequencyAnalysis());
+                self::frequency($cipher, $args);
+                break;
+
+            default:
+                echo "Selected is Cipher is not available!\n";
+                exit;
+        }
+
+    }
+
+    public static function frequency(Cipher $cipher, $args){
+        print $cipher->selected() . PHP_EOL;
+
+        if(array_key_exists('m', $args)){
+            $cipher->text($args['m']);
+        }
+
+        print("Frequency") . PHP_EOL;
+
+        var_dump($cipher->encrypt())   . PHP_EOL;
+
+
+    }
+
+    public static function substitution(Cipher $cipher, $args){
+
         print $cipher->selected() . PHP_EOL;
 
         if(array_key_exists('k', $args)){
@@ -74,9 +115,6 @@ class Cli{
             print "Decrypted Text: ";
             print $cipher->decrypt()   . PHP_EOL;
         }
-
-
-
     }
 
 
