@@ -82,7 +82,14 @@ class Cli{
 
         print("Frequency") . PHP_EOL;
 
-        var_dump($cipher->encrypt())   . PHP_EOL;
+        foreach($cipher->encrypt() as $key => $value){
+
+            print("$key with count of $value") .PHP_EOL;
+
+        }
+
+
+
 
 
     }
